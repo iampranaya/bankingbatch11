@@ -59,14 +59,15 @@
 		</div>
 		
 		<span style="color: red;font-size: 18px;" th:utext="${message}"></span>
-​		 <form method="post"  th:action="@{/customer/addPayee}">
+​		 <form method="post"  th:action="@{/customer/transferFund}">
 			<label for="payeeName">Payee Name:</label>
 			<br> 
-			  <select style="width:20%">
-		         <option th:each="payeeVo : ${payeeList}" th:value="${payeeVo.payeeAccountNo}" th:text="${payeeVo.payeeName}"></option>
+			  <select  name="payeeAccountNo" style="width:20%">
+		         <option th:each="payeeVo : ${payeeList}" th:value="${payeeVo.payeeAccountNo}" th:text="${payeeVo.payeeNickName}"></option>
 		      </select>
 			<br> <!-- TBD -->
-			<label for="payeeNickName">Amount:</label><br> <input type="number" name="amount"><br> 
+				<label for="currency">Currency:</label><br> <input type="text" name="currency"><br> 
+			<label for="Amont">Amount:</label><br> <input type="number" name="amount"><br> 		
 			<label for="remarks">Remarks:</label><br> <input type="text" name="remarks"><br>
 			<br> <input type="submit" value="Transfer Amount" id="submit">
 	​

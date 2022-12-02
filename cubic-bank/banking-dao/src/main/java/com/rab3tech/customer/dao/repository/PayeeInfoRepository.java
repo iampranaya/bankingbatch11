@@ -14,6 +14,8 @@ public interface PayeeInfoRepository extends JpaRepository<PayeeInfo, Integer>{
 
 	List<PayeeInfo> findByCustomerId(String customerId);
 
+	Optional<PayeeInfo> findByPayeeAccountNo(String payeeAccountNo);
+
 	
 	
 

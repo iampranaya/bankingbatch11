@@ -20,6 +20,8 @@ import com.rab3tech.customer.service.CustomerAccountInfoService;
 import com.rab3tech.customer.service.CustomerService;
 import com.rab3tech.customer.service.LoginService;
 import com.rab3tech.customer.service.PayeeService;
+import com.rab3tech.customer.service.TransactionService;
+
 import com.rab3tech.customer.service.impl.CustomerEnquiryService;
 import com.rab3tech.customer.service.impl.SecurityQuestionService;
 import com.rab3tech.email.service.EmailService;
@@ -31,6 +33,7 @@ import com.rab3tech.vo.CustomerVO;
 import com.rab3tech.vo.EmailVO;
 import com.rab3tech.vo.LoginVO;
 import com.rab3tech.vo.PayeeInfoVO;
+import com.rab3tech.vo.TransactionVO;
 
 /**
  * 
@@ -56,6 +59,9 @@ public class CustomerUIController {
 
 	@Autowired
 	private EmailService emailService;
+	
+	@Autowired
+	private TransactionService transactionService;
 	
 	@Autowired
    private LoginService loginService;	
@@ -253,13 +259,14 @@ public class CustomerUIController {
 	}
 	
 	@PostMapping("/customer/transferFund")
-	public String transferFund( HttpSession session, Model model) {
+	public String transferFund( HttpSession session, Model model, @ModelAttribute TransactionVO transaction) {
 		LoginVO  loginVO = (LoginVO) session.getAttribute("userSessionVO");
-		PayeeInfoVO payeeVO = new PayeeInfoVO();
+	
 		if(loginVO !=null ) {
-			payeeVO.setCustomerId(loginVO.getUsername());
+			transaction.setCustomerId(loginVO.getUsername());
+			transaction.setName(loginVO.getName());
 			
-			String message = payeeService.addPayee(payeeVO);
+			String message = transactionService.fundTransfer(transaction);
 			model.addAttribute("message", message);
 			
 			return "customer/addPayee";
