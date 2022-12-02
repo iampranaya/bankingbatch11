@@ -3,7 +3,7 @@
 	xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="utf-8" />
-<title>Fund Transfer</title>
+<title>Show Transfer List</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet"
@@ -14,65 +14,98 @@
 	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
-	<style>
-	input[type=submit] {
+<style>
+input[type=submit] {
 	background: #0066A2;
 	color: white;
 	border-style: outset;
 	border-color: #0066A2;
-	font: bold15px arial,sans-serif;
+	font: bold15px arial, sans-serif;
 	text-shadow: none;
 }
-	
-	</style>
-​
-​
+</style>
+​ ​
 </head>
 ​
 <body>
-		<header style="height: 30px;background-color: maroon;color:white;">
-		  Hello Mr. <span th:utext="${session.userSessionVO.username}" th:unless="${session == null}" style="font-weight: bold;"></span>
-		   
-		</header>
-		
-​
+	<header style="height: 30px; background-color: maroon; color: white;">
+		Hello Mr. <span th:utext="${session.userSessionVO.username}"
+			th:unless="${session == null}" style="font-weight: bold;"></span>
+
+	</header>
+
+	​
 	<div class="container">
-		<h3>Fund Transfer</h3>
+		<h3>SHOW Transfer List</h3>
 		<div>
 			<div>
-        	<a th:href="@{/customer/dashboard}">
-				<button type="button" class="btn btn-primary">Dash Board</button>
-			</a>
-		  	<a th:href="@{/customer/createAccount}"> 
-		  		<button type="button" class="btn btn-success">Customer Account</button>
-		  	</a>
-		  	<a th:href="@{/customer/addPayee}"> 
-		  		<button type="button" class="btn btn-secondary">Add Payee</button>
-		  	</a>
-		  	<a th:href="@{/customer/myProfile}"> 
-		  		<button type="button" class="btn btn-primary">My Profile</button>
-		  	</a>
-			<a th:href="@{/customer/logout}"> 
-				<button type="button" class="btn btn-warning">Logout</button>
-			</a>
+				<a th:href="@{/customer/dashboard}">
+					<button type="button" class="btn btn-primary">Dash Board</button>
+				</a> <a th:href="@{/customer/addPayee}">
+					<button type="button" class="btn btn-secondary">Add Payee</button>
+				</a> <a th:href="@{/customer/myProfile}">
+					<button type="button" class="btn btn-primary">My Profile</button>
+				</a> <a th:href="@{/customer/logout}">
+					<button type="button" class="btn btn-warning">Logout</button>
+				</a>
+			</div>
 		</div>
+
+		<!-- 	<span style="color: red;font-size: 18px;" th:utext="${message}"></span> -->
+
+		<br>
+		<div class="container">
+			<table class="table table-bordered" style="width: 100%">
+				<!-- <th:block th:each="user : ${users}"> -->
+
+				<thead>
+					<tr>
+
+
+						<th>name</th>
+						<th>customerId</th>
+						<th>amount</th>
+						<th>doe</th>
+						<th>payeeAccountNo</th>
+						<th>payeeNickName</th>
+						<th>remarks</th>
+					</tr>
+				</thead>
+
+				<tbody>
+
+					<tr th:each="transferData : ${transferData}">
+                    <td th:text="${transferData.name}">Name</td>
+                    <td th:text="${transferData.customerId}">customerId</td>
+                    <td th:text="${transferData.amount}">amount</td>
+                      <td th:text="${transferData.doe}">doe</td>
+                    <td th:text="${transferData.payeeAccountNo}">payeeAccountNo</td>
+                    <td th:text="${transferData.payeeNickName}">payeeNickName</td>
+                    <td th:text="${transferData.remarks}">remarks</td>
+            
+                </tr>
+
+
+
+				</tbody>
+
+				<!--  </tr>
+      <tr>
+         <td th:text="${user.login}">...</td>
+         <td th:text="${user.name}">...</td>
+      </tr>
+      <tr>
+         <td colspan="2" th:text="${user.address}">...</td>
+      </tr>
+   </th:block> -->
+
+
+			</table>
 		</div>
-		
-		<span style="color: red;font-size: 18px;" th:utext="${message}"></span>
-​		 <form method="post"  th:action="@{/customer/transferFund}">
-			<label for="payeeName">Payee Name:</label>
-			<br> 
-			  <select  name="payeeAccountNo" style="width:20%">
-		         <option th:each="payeeVo : ${payeeList}" th:value="${payeeVo.payeeAccountNo}" th:text="${payeeVo.payeeNickName}"></option>
-		      </select>
-			<br> <!-- TBD -->
-				<label for="currency">Currency:</label><br> <input type="text" name="currency"><br> 
-			<label for="Amont">Amount:</label><br> <input type="number" name="amount"><br> 		
-			<label for="remarks">Remarks:</label><br> <input type="text" name="remarks"><br>
-			<br> <input type="submit" value="Transfer Amount" id="submit">
-	​
-​		</form>
+
+
+
 	</div>
-​
+	​
 </body>
 </html>

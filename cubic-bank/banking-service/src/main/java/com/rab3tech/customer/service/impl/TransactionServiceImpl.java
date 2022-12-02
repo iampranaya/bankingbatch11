@@ -1,6 +1,7 @@
 package com.rab3tech.customer.service.impl;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -89,6 +90,21 @@ public class TransactionServiceImpl implements TransactionService{
 				transactionRepository.save(transaction);
 				return "Amount has been transferred sucessfully";
 			}
+
+	@Override
+	public List<TransactionVO> showData() {
+		List<Transaction> transactions = transactionRepository.findAll();
+		List<TransactionVO> transactionVOs = new ArrayList<>();
+		for(Transaction element : transactions) {
+			TransactionVO transactionVO  = new TransactionVO();
+			BeanUtils.copyProperties(element, transactionVO);
+			transactionVOs.add(transactionVO);
+		}
+		
+		
+		
+		return transactionVOs;
+	}
 	}
 
 

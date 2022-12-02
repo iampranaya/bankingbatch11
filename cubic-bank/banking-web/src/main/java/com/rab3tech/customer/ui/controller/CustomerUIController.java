@@ -276,6 +276,20 @@ public class CustomerUIController {
 		
 	}
 	
+	@GetMapping("customer/showdatas")
+	public String showDatas(HttpSession session, Model model) {
+		
+		LoginVO  loginVO = (LoginVO) session.getAttribute("userSessionVO");
+		
+		if(loginVO !=null ) {
+			List<TransactionVO> transferData =  transactionService.showData();
+			model.addAttribute("transferData", transferData);
+			
+		}
+		return "customer/showtransferdata"; //.html
+		
+	}
+	
 	
 	
 
