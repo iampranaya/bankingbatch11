@@ -62,7 +62,7 @@ public class TransactionServiceImpl implements TransactionService{
 				}
 				//receiverAccount validation
 				Optional<CustomerAccountInfo> receiverAccount = accountRepo.findByAccountNumber(vo.getPayeeAccountNo());
-				if(receiverAccount.isEmpty()) {
+				if(!receiverAccount.isPresent()) {
 					return "Amont cannot be transferred  as receiver is not having valid account";
 				}else {
 					if(!receiverAccount.get().getAccountType().equals("SAVING")) {
@@ -82,9 +82,13 @@ public class TransactionServiceImpl implements TransactionService{
 				
 				Transaction transaction = new Transaction();
 				BeanUtils.copyProperties(vo, transaction);
-				BeanUtils.copyProperties(transactionData.get(), transaction);
+				/*BeanUtils.copyProperties(transactionData.get(), transaction);
 				BeanUtils.copyProperties(customerData.get(), transaction);
-
+*/
+				transaction.setPayeeNickName(transactionData.get().getPayeeNickName());
+				transaction.setName(customerData.get().getName());
+				
+				
 				transaction.setDoe(new Timestamp(new Date().getTime()));
 				//transaction. setPayeeNickName(transactionData.getPayeeNickName().get());
 				transactionRepository.save(transaction);
