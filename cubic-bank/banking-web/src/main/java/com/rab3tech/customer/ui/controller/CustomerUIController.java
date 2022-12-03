@@ -20,8 +20,6 @@ import com.rab3tech.customer.service.CustomerAccountInfoService;
 import com.rab3tech.customer.service.CustomerService;
 import com.rab3tech.customer.service.LoginService;
 import com.rab3tech.customer.service.PayeeService;
-import com.rab3tech.customer.service.TransactionService;
-
 import com.rab3tech.customer.service.impl.CustomerEnquiryService;
 import com.rab3tech.customer.service.impl.SecurityQuestionService;
 import com.rab3tech.email.service.EmailService;
@@ -33,7 +31,6 @@ import com.rab3tech.vo.CustomerVO;
 import com.rab3tech.vo.EmailVO;
 import com.rab3tech.vo.LoginVO;
 import com.rab3tech.vo.PayeeInfoVO;
-import com.rab3tech.vo.TransactionVO;
 
 /**
  * 
@@ -59,9 +56,6 @@ public class CustomerUIController {
 
 	@Autowired
 	private EmailService emailService;
-	
-	@Autowired
-	private TransactionService transactionService;
 	
 	@Autowired
    private LoginService loginService;	
@@ -132,8 +126,8 @@ public class CustomerUIController {
 		}
 	}
 
-	@PostMapping("/customer/account/registration")
-	public String createCustomer(@ModelAttribute CustomerVO customerVO, Model model) {
+	@PostMapping("/customer/account/registration") //@RequestBody convert JSON to JAVA and add in CustomerVO
+	public String createCustomer(@ModelAttribute CustomerVO customerVO, Model model) { //Model sent data 
 		// saving customer into database
 		logger.debug(customerVO.toString());
 		customerVO = customerService.createAccount(customerVO);
@@ -150,11 +144,11 @@ public class CustomerUIController {
 		return "customer/login";
 	}
 
-	@GetMapping(value = { "/customer/account/enquiry", "/", "/mocha", "/welcome" })
+	@GetMapping(value = { "/customer/account/enquiry", "/mocha", "/welcome" })
 	public String showCustomerEnquiryPage(Model model) {
 		CustomerSavingVO customerSavingVO = new CustomerSavingVO();
 		// model is map which is used to carry object from controller to view
-		model.addAttribute("customerSavingVO", customerSavingVO);
+		model.addAttribute("customerSavingVO", customerSavingVO); // Obj customerSavingVO 
 		return "customer/customerEnquiry"; // customerEnquiry.html
 	}
 
@@ -176,9 +170,12 @@ public class CustomerUIController {
 
 	}
 	
-	@GetMapping("/customer/myProfile")
+	@GetMapping({"/customer/myProfile", "/"})
+	
+	// Hello world
 	public String myProfile(Model model, HttpSession session) {
 		LoginVO  loginVO = (LoginVO) session.getAttribute("userSessionVO");
+		
 		if(loginVO !=null ) {
 			String loginid=loginVO.getUsername();
 			//get customer data 
@@ -259,34 +256,19 @@ public class CustomerUIController {
 	}
 	
 	@PostMapping("/customer/transferFund")
-	public String transferFund( HttpSession session, Model model, @ModelAttribute TransactionVO transaction) {
+	public String transferFund( HttpSession session, Model model) {
 		LoginVO  loginVO = (LoginVO) session.getAttribute("userSessionVO");
-	
+		PayeeInfoVO payeeVO = new PayeeInfoVO();
 		if(loginVO !=null ) {
-			transaction.setCustomerId(loginVO.getUsername());
-			transaction.setName(loginVO.getName());
+			payeeVO.setCustomerId(loginVO.getUsername());
 			
-			String message = transactionService.fundTransfer(transaction);
+			String message = payeeService.addPayee(payeeVO);
 			model.addAttribute("message", message);
 			
 			return "customer/addPayee";
 		}else {
 			return "customer/login";
 		}
-		
-	}
-	
-	@GetMapping("customer/showdatas")
-	public String showDatas(HttpSession session, Model model) {
-		
-		LoginVO  loginVO = (LoginVO) session.getAttribute("userSessionVO");
-		
-		if(loginVO !=null ) {
-			List<TransactionVO> transferData =  transactionService.showData();
-			model.addAttribute("transferData", transferData);
-			
-		}
-		return "customer/showtransferdata"; //.html
 		
 	}
 	
