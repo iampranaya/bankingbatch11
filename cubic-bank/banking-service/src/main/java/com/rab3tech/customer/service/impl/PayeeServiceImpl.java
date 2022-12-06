@@ -22,7 +22,7 @@ import com.rab3tech.dao.entity.PayeeInfo;
 import com.rab3tech.vo.PayeeInfoVO;
 
 
-@Service//
+@Service
 @Transactional
 public class PayeeServiceImpl implements PayeeService{
 	@Autowired
