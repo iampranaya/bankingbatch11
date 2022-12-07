@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.rab3tech.customer.service.CustomerAccountInfoService;
 import com.rab3tech.customer.service.CustomerService;
+import com.rab3tech.customer.service.CustomerStatementService;
 import com.rab3tech.customer.service.LoginService;
 import com.rab3tech.customer.service.PayeeService;
 import com.rab3tech.customer.service.TransactionService;
@@ -33,6 +34,7 @@ import com.rab3tech.vo.CustomerVO;
 import com.rab3tech.vo.EmailVO;
 import com.rab3tech.vo.LoginVO;
 import com.rab3tech.vo.PayeeInfoVO;
+import com.rab3tech.vo.StatementVO;
 import com.rab3tech.vo.TransactionVO;
 
 /**
@@ -72,6 +74,9 @@ public class CustomerUIController {
 	
 	@Autowired
 	private PayeeService payeeService;
+	
+	@Autowired
+	private CustomerStatementService customerStatementService;
 	
 	@PostMapping("/customer/changePassword")
 	public String saveCustomerQuestions(@ModelAttribute ChangePasswordVO changePasswordVO, Model model,HttpSession session) {
@@ -288,6 +293,17 @@ public class CustomerUIController {
 		}
 		return "customer/showtransferdata"; //.html
 		
+	}
+	
+	@GetMapping("/customer/statement")
+	public String showCustomerStatement(HttpSession session, Model model) {
+		LoginVO loginVO = (LoginVO) session.getAttribute("userSessionVO");
+		if (loginVO != null) {
+			List<StatementVO> statementData = customerStatementService.showCustomerStatement(loginVO.getUsername());
+			model.addAttribute("statementData", statementData);
+		}
+		return "customer/login";
+		//return "customer/customerStatement"; // html
 	}
 	
 	

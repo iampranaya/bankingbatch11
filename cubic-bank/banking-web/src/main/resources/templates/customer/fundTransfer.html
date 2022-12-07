@@ -66,7 +66,7 @@
 		         <option th:each="payeeVo : ${payeeList}" th:value="${payeeVo.payeeAccountNo}" th:text="${payeeVo.payeeNickName}"></option>
 		      </select>
 			<br> <!-- TBD -->
-				<label for="currency">Currency:</label><br> <input type="text" name="currency"><br> 
+				
 			<label for="Amont">Amount:</label><br> <input type="number" name="amount"><br> 		
 			<label for="remarks">Remarks:</label><br> <input type="text" name="remarks"><br>
 			<br> <input type="submit" value="Transfer Amount" id="submit">
