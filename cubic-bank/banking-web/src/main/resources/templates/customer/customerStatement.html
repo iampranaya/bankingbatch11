@@ -24,6 +24,15 @@ input[type=submit] {
 	text-shadow: none;
 }
 </style>
+<script type="text/javascript">
+
+$(document).ready(funtion(){
+		$(`#statementList`).DataTable();
+	
+});
+
+
+</script>
 </head>
 <body>
 	<header style="height: 30px; background-color: maroon; color: white;">
@@ -48,27 +57,31 @@ input[type=submit] {
 		</div>
 		<!-- 	<span style="color: red;font-size: 18px;" th:utext="${message}"></span> -->
 		<br>
+		
+		<!--   <h4> The Account Balance is (USD): </h4> <span th:utext="${balance}" style="color: red;font-size: 30px;"></span>
+		  <br> -->
+		  
 		<div class="container">
-			<table class="table table-bordered" style="width: 100%">
+			<table id="statementList" class="table table-striped table-bordered" style="width: 100%">
 				<!-- <th:block th:each="user : ${users}"> -->
 				<thead>
 					<tr>
-						<th>Account Number</th>
+						<th>Transaction Date</th>
 						<th>Name</th>
-						<th>Debit</th>
-						<th>Credit</th>
-						<th>Balance</th>
+						<th>Account Number</th>
+						<th>Amount(USD)</th>
+						<th>Transaction Type</th>
 						<th>Remarks</th>
 					</tr>
 				</thead>
 				<tbody>
-					<tr th:each="statementData : ${statementData}">
-                    <td th:text="${statementData.accountNumber}">Account Number</td>
-                    <td th:text="${statementData.name}">Name</td>
-                    <td th:text="${statementData.debit}">Debit</td>
-                      <td th:text="${statementData.credit}">Credit</td>
-                    <td th:text="${statementData.tavBalance}">Balance</td>
-                    <td th:text="${statementData.remarks}">Remarks</td>
+					<tr th:each="statement : ${statementData}">
+                    <td th:text="${statement.doe}">Transaction Date</td>
+                    <td th:text="${statement.name}">Name</td>
+                    <td th:text="${statement.accountNumber}">Account Number</td>
+                      <td th:text="${statement.amount}">Amount</td>
+                    <td th:text="${statement.accountType}">Transaction Type</td>
+                    <td th:text="${statement.remarks}">Remarks</td>
                 </tr>
 				</tbody>
 				<!--  </tr>
