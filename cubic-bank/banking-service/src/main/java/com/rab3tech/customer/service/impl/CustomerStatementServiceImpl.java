@@ -33,13 +33,15 @@ public class CustomerStatementServiceImpl implements CustomerStatementService {
 
 		Optional<CustomerAccountInfo> customerAccountInformation = customerAccountInfoRepository.findByCustomerId(username);
 		// CustomerAccountInfo customerInfo = customerAccountInformation.get();
+		float balance = customerAccountInformation.get().getAvBalance();
 		
 		// vo.setAccountNumber(customerAccountInformation.get().getAccountNumber());
 		if (customerAccountInformation.isPresent()) {
 			List<Transaction> transaction = transactionRepository.findByCustomerIdOrPayeeAccountNo(username,customerAccountInformation.get().getAccountNumber());
 
 			for (Transaction trans : transaction) {
-				StatementVO vo = new StatementVO();				
+				StatementVO vo = new StatementVO();	
+				vo.setTavBalance(balance);
 				BeanUtils.copyProperties(trans, vo);				
 				if (trans.getCustomerId().equals(username)) {
 					vo.setAccountType("Debit");

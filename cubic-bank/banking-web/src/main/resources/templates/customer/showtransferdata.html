@@ -62,12 +62,10 @@ input[type=submit] {
 					<tr>
 
 
-						<th>Sender Name</th>
 						<th>Customer Id</th>
 						<th>Amount</th>
 						<th>doe</th>
 						<th>Receiver AccountNo</th>
-						<th>Receiver NickName</th>
 						<th>Remarks</th>
 					</tr>
 				</thead>
@@ -75,12 +73,11 @@ input[type=submit] {
 				<tbody>
 
 					<tr th:each="transferData : ${transferData}">
-                    <td th:text="${transferData.name}">Name</td>
+                  
                     <td th:text="${transferData.customerId}">customerId</td>
                     <td th:text="${transferData.amount}">amount</td>
                       <td th:text="${transferData.doe}">doe</td>
                     <td th:text="${transferData.payeeAccountNo}">payeeAccountNo</td>
-                    <td th:text="${transferData.payeeNickName}">payeeNickName</td>
                     <td th:text="${transferData.remarks}">remarks</td>
             
                 </tr>

@@ -77,7 +77,7 @@ public class PayeeServiceImpl implements PayeeService{
 				PayeeInfo entity = new PayeeInfo();
 				BeanUtils.copyProperties(payeeVO, entity);
 				entity.setDoe(new Timestamp(new Date().getTime()));
-				//entity.setDom(new Timestamp(new Date().getTime()));
+				entity.setDom(new Timestamp(new Date().getTime()));
 				entity.setStatus("Approved");
 				payeeInfoRepository.save(entity);
 				return "payee added sucessfully";

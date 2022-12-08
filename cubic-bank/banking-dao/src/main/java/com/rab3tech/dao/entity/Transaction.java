@@ -15,12 +15,8 @@ public class Transaction {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
-	//	//from cutomer table sender name
-	private String name;
 	private String customerId;
 	private String payeeAccountNo;
-	//receiver nick name
-	private String payeeNickName;
 	private float amount;
 	private String remarks;
 	private Timestamp doe;
@@ -63,16 +59,6 @@ public class Transaction {
 	public void setDoe(Timestamp doe) {
 		this.doe = doe;
 	}
-	public String getName() {
-		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
-	}
-	public String getPayeeNickName() {
-		return payeeNickName;
-	}
-	public void setPayeeNickName(String payeeNickName) {
-		this.payeeNickName = payeeNickName;
-	}
+	
+	
 }
