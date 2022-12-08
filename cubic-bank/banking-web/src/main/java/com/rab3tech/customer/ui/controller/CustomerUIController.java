@@ -306,19 +306,31 @@ public class CustomerUIController {
 		return "customer/customerStatement"; // html
 	}
 
-	@GetMapping("/customer/sendEmail")
-	public String sendEmail(HttpSession session, Model model) {
-		LoginVO loginVO = (LoginVO) session.getAttribute("userSessionVO");
-		if (loginVO != null) {
-			/*
-			 * EmailVO mail = new EmailVO(loginVO.getUsername(), "javahunk2020@gmail.com",
-			 * "Adding new Payee " + payeeVO.getPayeeName() + "  for " +
-			 * payeeVO.getRemarks(), "", payeeVO.getPayeeName());
-			 * emailService.addPayeeEmail(mail,payeeVO); model.addAttribute("message",
-			 * message);
-			 */
-
-		}
-		return "customer/dashboard";
+	/*@GetMapping("/customer/sendAccountStmt")
+	public String customerSendStatementEmail(Model model,HttpSession session) {
+		
+			LoginVO  loginVO2=(LoginVO)session.getAttribute("userSessionVO");
+			String currentLoggedInUserName=loginVO2.getUsername();
+			
+            //This I need for email
+			EmailVO mail = new EmailVO(currentLoggedInUserName, "javahunk2020@gmail.com",
+					"Not setting", "", currentLoggedInUserName);
+			mail.setUsername(currentLoggedInUserName);
+			//mail.setName(loginVO2.getName());
+			emailService.sendAccountStatement(mail);
+			
+			//This I need for showing all the transaction details of customer again from,
+			//database!
+			List<CustomerTransactionVO>  customerTransactionVOs=customerTransactionService.findCustomerTransaction(loginVO2.getUsername();
+			model.addAttribute("customerTransactionVOs", customerTransactionVOs);
+			//customer/accountSummary - view name
+			return "customer/customerTransaction"; // thyme leaf
+		
 	}
+	*/
+	
+	
+	
+	
+	
 }

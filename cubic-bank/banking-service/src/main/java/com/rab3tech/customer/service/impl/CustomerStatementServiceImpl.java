@@ -10,9 +10,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.rab3tech.customer.dao.repository.CustomerAccountInfoRepository;
-
+import com.rab3tech.customer.dao.repository.CustomerRepository;
 import com.rab3tech.customer.dao.repository.TransactionRepository;
 import com.rab3tech.customer.service.CustomerStatementService;
+import com.rab3tech.dao.entity.Customer;
 import com.rab3tech.dao.entity.CustomerAccountInfo;
 import com.rab3tech.dao.entity.Transaction;
 import com.rab3tech.vo.StatementVO;
@@ -26,13 +27,17 @@ public class CustomerStatementServiceImpl implements CustomerStatementService {
 
 	@Autowired
 	TransactionRepository transactionRepository;
+	
+	@Autowired
+	CustomerRepository customerRepository;
 
 	@Override
 	public List<StatementVO> showCustomerStatement(String username) {
 		List<StatementVO> statementVO = new ArrayList<StatementVO>();
 
 		Optional<CustomerAccountInfo> customerAccountInformation = customerAccountInfoRepository.findByCustomerId(username);
-		// CustomerAccountInfo customerInfo = customerAccountInformation.get();
+		Optional<Customer> customerInfo = customerRepository.findByEmail(username);
+		
 		float balance = customerAccountInformation.get().getAvBalance();
 		
 		// vo.setAccountNumber(customerAccountInformation.get().getAccountNumber());
@@ -46,10 +51,13 @@ public class CustomerStatementServiceImpl implements CustomerStatementService {
 				if (trans.getCustomerId().equals(username)) {
 					vo.setAccountType("Debit");
 					vo.setAccountNumber(trans.getPayeeAccountNo());
+					vo.setName(customerInfo.get().getName());
 					
 					} else {
 					vo.setAccountType("CREDIT");
 					vo.setAccountNumber(customerAccountInformation.get().getAccountNumber());
+					Optional<Customer> senderInfo = customerRepository.findByEmail(trans.getCustomerId());
+					vo.setName(senderInfo.get().getName());
 					}
 				statementVO.add(vo);
 			}
