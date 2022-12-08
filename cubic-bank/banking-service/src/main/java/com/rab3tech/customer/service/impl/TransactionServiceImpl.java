@@ -31,21 +31,12 @@ public class TransactionServiceImpl implements TransactionService{
 	
 	@Autowired
 	TransactionRepository transactionRepository;
-	
-	@Autowired
-	PayeeInfoRepository payeeInfoRepository;
-	
-	@Autowired
-	CustomerRepository customerRepository;
-
+		
 	@Override
 	public String fundTransfer(TransactionVO vo) {
 
 		//senderAccount validation
 				Optional<CustomerAccountInfo> senderAccount = accountRepo.findByCustomerId(vo.getCustomerId());
-				Optional<PayeeInfo> transactionData = payeeInfoRepository.findByPayeeAccountNo(vo.getPayeeAccountNo());
-				Optional<Customer> customerData = customerRepository.findByEmail(vo.getCustomerId());
-				//String payeenick=transactionData.get();
 				if(!senderAccount.isPresent()) {
 					return "Amont cannot be transferred sender is not having valid account";
 				}else {
@@ -82,13 +73,7 @@ public class TransactionServiceImpl implements TransactionService{
 				
 				Transaction transaction = new Transaction();
 				BeanUtils.copyProperties(vo, transaction);
-				/*BeanUtils.copyProperties(transactionData.get(), transaction);
-				BeanUtils.copyProperties(customerData.get(), transaction);
-*/
-				transaction.setPayeeNickName(transactionData.get().getPayeeNickName());
-				transaction.setName(customerData.get().getName());
-				
-				
+					
 				transaction.setDoe(new Timestamp(new Date().getTime()));
 				//transaction. setPayeeNickName(transactionData.getPayeeNickName().get());
 				transactionRepository.save(transaction);

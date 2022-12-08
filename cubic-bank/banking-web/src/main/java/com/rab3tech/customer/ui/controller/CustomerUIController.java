@@ -37,8 +37,7 @@ import com.rab3tech.vo.TransactionVO;
 
 /**
  * 
- * @author nagendra
- * This class for customer GUI
+ * @author nagendra This class for customer GUI
  *
  */
 @Controller
@@ -49,59 +48,59 @@ public class CustomerUIController {
 	@Autowired
 	private CustomerEnquiryService customerEnquiryService;
 
-	
 	@Autowired
 	private SecurityQuestionService securityQuestionService;
-	
-	
+
 	@Autowired
 	private CustomerService customerService;
 
 	@Autowired
 	private EmailService emailService;
-	
+
 	@Autowired
 	private TransactionService transactionService;
-	
+
 	@Autowired
-   private LoginService loginService;	
-	
+	private LoginService loginService;
 
 	@Autowired
 	private CustomerAccountInfoService accountService;
-	
+
 	@Autowired
 	private PayeeService payeeService;
-	
+
 	@Autowired
 	private CustomerStatementService customerStatementService;
-	
+
 	@PostMapping("/customer/changePassword")
-	public String saveCustomerQuestions(@ModelAttribute ChangePasswordVO changePasswordVO, Model model,HttpSession session) {
-		LoginVO  loginVO2=(LoginVO)session.getAttribute("userSessionVO");
-		String loginid=loginVO2.getUsername();
+	public String saveCustomerQuestions(@ModelAttribute ChangePasswordVO changePasswordVO, Model model,
+			HttpSession session) {
+		LoginVO loginVO2 = (LoginVO) session.getAttribute("userSessionVO");
+		String loginid = loginVO2.getUsername();
 		changePasswordVO.setLoginid(loginid);
-		String viewName ="customer/dashboard";
-		boolean status=loginService.checkPasswordValid(loginid,changePasswordVO.getCurrentPassword());
-		if(status) {
-			if(changePasswordVO.getNewPassword().equals(changePasswordVO.getConfirmPassword())) {
-				 viewName ="customer/dashboard";
-				 loginService.changePassword(changePasswordVO);
-			}else {
-				model.addAttribute("error","Sorry , your new password and confirm passwords are not same!");
-				return "customer/login";	//login.html	
+		String viewName = "customer/dashboard";
+		boolean status = loginService.checkPasswordValid(loginid, changePasswordVO.getCurrentPassword());
+		if (status) {
+			if (changePasswordVO.getNewPassword().equals(changePasswordVO.getConfirmPassword())) {
+				viewName = "customer/dashboard";
+				loginService.changePassword(changePasswordVO);
+			} else {
+				model.addAttribute("error", "Sorry , your new password and confirm passwords are not same!");
+				return "customer/login"; // login.html
 			}
-		}else {
-			model.addAttribute("error","Sorry , your username and password are not valid!");
-			return "customer/login";	//login.html	
+		} else {
+			model.addAttribute("error", "Sorry , your username and password are not valid!");
+			return "customer/login"; // login.html
 		}
 		return viewName;
 	}
-	
+
 	@PostMapping("/customer/securityQuestion")
-	public String saveCustomerQuestions(@ModelAttribute("customerSecurityQueAnsVO") CustomerSecurityQueAnsVO customerSecurityQueAnsVO, Model model,HttpSession session) {
-		LoginVO  loginVO2=(LoginVO)session.getAttribute("userSessionVO");
-		String loginid=loginVO2.getUsername();
+	public String saveCustomerQuestions(
+			@ModelAttribute("customerSecurityQueAnsVO") CustomerSecurityQueAnsVO customerSecurityQueAnsVO, Model model,
+			HttpSession session) {
+		LoginVO loginVO2 = (LoginVO) session.getAttribute("userSessionVO");
+		String loginid = loginVO2.getUsername();
 		customerSecurityQueAnsVO.setLoginid(loginid);
 		securityQuestionService.save(customerSecurityQueAnsVO);
 		//
@@ -178,133 +177,148 @@ public class CustomerUIController {
 		return "customer/success"; // customerEnquiry.html
 
 	}
-	
+
 	@GetMapping("/customer/myProfile")
 	public String myProfile(Model model, HttpSession session) {
-		LoginVO  loginVO = (LoginVO) session.getAttribute("userSessionVO");
-		if(loginVO !=null ) {
-			String loginid=loginVO.getUsername();
-			//get customer data 
+		LoginVO loginVO = (LoginVO) session.getAttribute("userSessionVO");
+		if (loginVO != null) {
+			String loginid = loginVO.getUsername();
+			// get customer data
 			CustomerVO customer = customerService.getCustomerData(loginid);
-			// add to model 
+			// add to model
 			model.addAttribute("customerVO", customer);
-			// return to jsp 
+			// return to jsp
 			return "customer/myProfile";
-		}else {
+		} else {
 			return "customer/login";
 		}
 	}
-	
+
 	@PostMapping("/customer/updateProfile")
 	public String updateProfile(@ModelAttribute CustomerVO customer, Model model, HttpSession session) {
-		LoginVO  loginVO = (LoginVO) session.getAttribute("userSessionVO");
-		if(loginVO !=null ) {
-			//call customerService -> create new method for updateProfile -> call repository.save() 
+		LoginVO loginVO = (LoginVO) session.getAttribute("userSessionVO");
+		if (loginVO != null) {
+			// call customerService -> create new method for updateProfile -> call
+			// repository.save()
 			String message = customerService.updateProfile(customer);
 			model.addAttribute("message", message);
 			return "customer/myProfile";
-		}else {
+		} else {
 			return "customer/login";
 		}
 	}
-	
-	
 
-	@GetMapping("/customer/createAccount") 
+	@GetMapping("/customer/createAccount")
 	public String createAccount(Model model, HttpSession session) {
-		LoginVO  loginVO = (LoginVO) session.getAttribute("userSessionVO");
-		if(loginVO !=null ) {
-			String loginid=loginVO.getUsername();
-			CustomerAccountInfoVO  accountVo = accountService.createAccount(loginid);
+		LoginVO loginVO = (LoginVO) session.getAttribute("userSessionVO");
+		if (loginVO != null) {
+			String loginid = loginVO.getUsername();
+			CustomerAccountInfoVO accountVo = accountService.createAccount(loginid);
 			model.addAttribute("accountVo", accountVo);
-			// return to jsp 
+			// return to jsp
 			return "customer/accountCreate";
-		}else {
+		} else {
 			return "customer/login";
 		}
 	}
+
 	@GetMapping("/customer/addPayee")
 	public String addPayee(HttpSession session) {
-		LoginVO  loginVO = (LoginVO) session.getAttribute("userSessionVO");
-		if(loginVO !=null ) {
+		LoginVO loginVO = (LoginVO) session.getAttribute("userSessionVO");
+		if (loginVO != null) {
 			return "customer/addPayee";
-		}else {
+		} else {
 			return "customer/login";
 		}
 	}
-	
+
 	@PostMapping("/customer/addPayee")
-	public String addNewPayee(@ModelAttribute PayeeInfoVO payeeVO , HttpSession session, Model model) {
-		LoginVO  loginVO = (LoginVO) session.getAttribute("userSessionVO");
-		if(loginVO !=null ) {
-			//call service
+	public String addNewPayee(@ModelAttribute PayeeInfoVO payeeVO, HttpSession session, Model model) {
+		LoginVO loginVO = (LoginVO) session.getAttribute("userSessionVO");
+		if (loginVO != null) {
+			// call service
 			payeeVO.setCustomerId(loginVO.getUsername());
 			String message = payeeService.addPayee(payeeVO);
+			EmailVO mail = new EmailVO(loginVO.getUsername(), "javahunk2020@gmail.com","Adding new Payee " + payeeVO.getPayeeName() + "  for " + payeeVO.getRemarks(), "",
+					payeeVO.getPayeeName());
+			emailService.addPayeeEmail(mail, payeeVO);
 			model.addAttribute("message", message);
 			return "customer/addPayee";
-		}else {
+		} else {
 			return "customer/login";
 		}
 	}
-	
+
 	@GetMapping("/customer/fundTransfer")
-	public String fundTransfer( HttpSession session, Model model) {
-		LoginVO  loginVO = (LoginVO) session.getAttribute("userSessionVO");
-		if(loginVO !=null ) {
+	public String fundTransfer(HttpSession session, Model model) {
+		LoginVO loginVO = (LoginVO) session.getAttribute("userSessionVO");
+		if (loginVO != null) {
 			List<PayeeInfoVO> payees = payeeService.findAllPayee(loginVO.getUsername());
 			model.addAttribute("payeeList", payees);
-			
+
 			return "customer/fundTransfer";
-		}else {
+		} else {
 			return "customer/login";
 		}
-		
+
 	}
-	
+
 	@PostMapping("/customer/transferFund")
-	public String transferFund( HttpSession session, Model model, @ModelAttribute TransactionVO transaction) {
-		LoginVO  loginVO = (LoginVO) session.getAttribute("userSessionVO");
-	
-		if(loginVO !=null ) {
+	public String transferFund(HttpSession session, Model model, @ModelAttribute TransactionVO transaction) {
+		LoginVO loginVO = (LoginVO) session.getAttribute("userSessionVO");
+
+		if (loginVO != null) {
 			transaction.setCustomerId(loginVO.getUsername());
 			transaction.setName(loginVO.getName());
-			
+
 			String message = transactionService.fundTransfer(transaction);
 			model.addAttribute("message", message);
-			
+
 			return "customer/addPayee";
-		}else {
+		} else {
 			return "customer/login";
 		}
-		
+
 	}
-	
+
 	@GetMapping("customer/showdatas")
 	public String showDatas(HttpSession session, Model model) {
-		
-		LoginVO  loginVO = (LoginVO) session.getAttribute("userSessionVO");
-		
-		if(loginVO !=null ) {
-			List<TransactionVO> transferData =  transactionService.showData();
+
+		LoginVO loginVO = (LoginVO) session.getAttribute("userSessionVO");
+		if (loginVO != null) {
+			List<TransactionVO> transferData = transactionService.showData();
 			model.addAttribute("transferData", transferData);
-			
+
 		}
-		return "customer/showtransferdata"; //.html
-		
+		return "customer/showtransferdata"; // .html
+
 	}
-	
+
 	@GetMapping("/customer/statement")
 	public String showCustomerStatement(HttpSession session, Model model) {
 		LoginVO loginVO = (LoginVO) session.getAttribute("userSessionVO");
 		if (loginVO != null) {
 			List<StatementVO> statementData = customerStatementService.showCustomerStatement(loginVO.getUsername());
+			model.addAttribute("balance", statementData.get(0).getTavBalance());
 			model.addAttribute("statementData", statementData);
 		}
-	
+
 		return "customer/customerStatement"; // html
 	}
-	
-	
-	
 
+	@GetMapping("/customer/sendEmail")
+	public String sendEmail(HttpSession session, Model model) {
+		LoginVO loginVO = (LoginVO) session.getAttribute("userSessionVO");
+		if (loginVO != null) {
+			/*
+			 * EmailVO mail = new EmailVO(loginVO.getUsername(), "javahunk2020@gmail.com",
+			 * "Adding new Payee " + payeeVO.getPayeeName() + "  for " +
+			 * payeeVO.getRemarks(), "", payeeVO.getPayeeName());
+			 * emailService.addPayeeEmail(mail,payeeVO); model.addAttribute("message",
+			 * message);
+			 */
+
+		}
+		return "customer/dashboard";
+	}
 }
