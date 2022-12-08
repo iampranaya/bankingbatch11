@@ -13,7 +13,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.rab3tech.customer.service.CustomerAccountInfoService;
@@ -22,7 +21,6 @@ import com.rab3tech.customer.service.CustomerStatementService;
 import com.rab3tech.customer.service.LoginService;
 import com.rab3tech.customer.service.PayeeService;
 import com.rab3tech.customer.service.TransactionService;
-
 import com.rab3tech.customer.service.impl.CustomerEnquiryService;
 import com.rab3tech.customer.service.impl.SecurityQuestionService;
 import com.rab3tech.email.service.EmailService;
@@ -302,8 +300,8 @@ public class CustomerUIController {
 			List<StatementVO> statementData = customerStatementService.showCustomerStatement(loginVO.getUsername());
 			model.addAttribute("statementData", statementData);
 		}
-		return "customer/login";
-		//return "customer/customerStatement"; // html
+	
+		return "customer/customerStatement"; // html
 	}
 	
 	
