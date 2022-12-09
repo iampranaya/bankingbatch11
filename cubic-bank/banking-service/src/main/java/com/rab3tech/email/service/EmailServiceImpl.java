@@ -235,7 +235,7 @@ public class EmailServiceImpl implements EmailService{
 		        context.setVariables(props);
 		        
 		        String html = templateEngine.process("sendStatement-email-template", context);
-		        helper.setTo(mail.getTo());
+		        helper.setTo(mail.getToo());
 		        helper.setText(html, true);
 		        helper.setSubject("Your account statement details.");
 		        helper.setFrom(mail.getFrom());

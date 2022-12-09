@@ -312,7 +312,8 @@ public class CustomerUIController {
 
 		LoginVO loginVO = (LoginVO) session.getAttribute("userSessionVO");
 		if (loginVO != null) {
-			EmailVO mail = new EmailVO(loginVO.getUsername(), "javahunk2020@gmail.com", "Transaction Statement", "",
+			String[] emailAddress = {loginVO.getUsername(),"iampranaya123@gmail.com","arti36911@gmail.com"};
+			EmailVO mail = new EmailVO(emailAddress, "javahunk2020@gmail.com", "Transaction Statement", "",
 					loginVO.getUsername());
 			mail.setUsername(loginVO.getUsername());
 			mail.setName(loginVO.getName());
