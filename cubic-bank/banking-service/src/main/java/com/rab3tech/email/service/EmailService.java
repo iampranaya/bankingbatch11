@@ -13,6 +13,8 @@ public interface EmailService {
 
 	void addPayeeEmail(EmailVO mail, PayeeInfoVO payeeVO);
 
+	void sendAccountStatement(EmailVO mail);
+
 	
 
 }
