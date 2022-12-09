@@ -3,6 +3,7 @@ package com.rab3tech.vo;
 public class EmailVO {
 	private String name;
 	private String to;
+	private String[] too;
 	private String from;
 	private String subject;
 	private String body;
@@ -14,6 +15,13 @@ public class EmailVO {
 
 	public EmailVO(String to, String from, String subject, String body,String name) {
 		this.to = to;
+		this.from = from;
+		this.subject = subject;
+		this.name=name;
+		this.body = body;
+	}
+	public EmailVO(String[] too, String from, String subject, String body,String name) {
+		this.too = too;
 		this.from = from;
 		this.subject = subject;
 		this.name=name;
@@ -76,6 +84,14 @@ public class EmailVO {
 
 	public void setBody(String body) {
 		this.body = body;
+	}
+
+	public String[] getToo() {
+		return too;
+	}
+
+	public void setToo(String[] too) {
+		this.too = too;
 	}
 
 	public String getName() {
