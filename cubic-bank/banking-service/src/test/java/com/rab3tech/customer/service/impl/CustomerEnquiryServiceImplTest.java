@@ -26,6 +26,8 @@ import org.mockito.junit.MockitoJUnitRunner;
 import com.rab3tech.admin.dao.repository.AccountStatusRepository;
 import com.rab3tech.admin.dao.repository.AccountTypeRepository;
 import com.rab3tech.customer.dao.repository.CustomerAccountEnquiryRepository;
+import com.rab3tech.dao.entity.AccountStatus;
+import com.rab3tech.dao.entity.AccountType;
 import com.rab3tech.dao.entity.CustomerSaving;
 import com.rab3tech.email.service.EmailService;
 import com.rab3tech.utils.AccountStatusEnum;
@@ -55,7 +57,7 @@ public class CustomerEnquiryServiceImplTest {
 	public void init() {
 		 MockitoAnnotations.initMocks(this);
 	}
-	
+
 	@Test
 	public void testFindPendingEnquiryWhenResult() {
 		 List<CustomerSaving> customerSavings=new ArrayList<>();
@@ -114,15 +116,31 @@ public class CustomerEnquiryServiceImplTest {
 	}
 
 	@Test
-	@Ignore
 	public void testFindById() {
-		fail("Not yet implemented");
+		AccountType accType = new AccountType(1, "AS001", "Pending", "Pending");
+        AccountStatus status = new AccountStatus(1, "AS001", "Pending", "Pending");
+        CustomerSaving customerSaving=new CustomerSaving(122,"Cubic","cubic@gmail.com","02390","NA","92828ns8w3",accType,status,null,"A435");
+        Optional<CustomerSaving> optional=Optional.of(customerSaving);
+		when(customerAccountEnquiryRepository.findById(122)).thenReturn(optional);
+		CustomerSavingVO vo = customerEnquiryServiceImpl.findById(122);
+		assertNotNull(vo);
+		assertEquals("Cubic", vo.getName());
+		assertEquals("cubic@gmail.com", vo.getEmail());
+		
+		
 	}
 
 	@Test
-	@Ignore
 	public void testChangeEnquiryStatus() {
-		fail("Not yet implemented");
+		AccountType accType = new AccountType(1, "AS001", "Pending", "Pending");
+        AccountStatus status = new AccountStatus(1, "AS001", "Pending", "Pending");
+        CustomerSaving customerSaving=new CustomerSaving(122,"Cubic","cubic@gmail.com","02390","NA","92828ns8w3",accType,status,null,"A435");
+        Optional<CustomerSaving> optional=Optional.of(customerSaving);
+        when(customerAccountEnquiryRepository.findByUcrid("92828ns8w3")).thenReturn(optional);
+        Optional<CustomerSavingVO> vo = customerEnquiryServiceImpl.findCustomerEnquiryByUuid("92828ns8w3");
+        assertNotNull(vo.get());
+        assertEquals("92828ns8w3", vo.get().getUcrid());
+		
 	}
 
 	@Test

@@ -36,10 +36,9 @@ public class CustomerEnquiryServiceImpl implements CustomerEnquiryService {
 
 	@Autowired
 	private AccountTypeRepository accountTypeRepository;
-	
+
 	@Autowired
 	private AccountStatusRepository accountStatusRepository;
-	
 
 	@Autowired
 	private EmailService emailService;
@@ -89,12 +88,13 @@ public class CustomerEnquiryServiceImpl implements CustomerEnquiryService {
 		List<CustomerSaving> customerSavingList = customerAccountEnquiryRepository.findAll();
 		return convertEntityIntoVO(customerSavingList);
 	}
-	
+
 	// DRY
 	@Override
 	@TimeLogger
 	public List<CustomerSavingVO> findPendingEnquiry() {
-		List<CustomerSaving> customerSavingList = customerAccountEnquiryRepository.findPendingEnquiries(AccountStatusEnum.PENDING.name());
+		List<CustomerSaving> customerSavingList = customerAccountEnquiryRepository
+				.findPendingEnquiries(AccountStatusEnum.PENDING.name());
 		return convertEntityIntoVO(customerSavingList);
 	}
 
@@ -102,23 +102,20 @@ public class CustomerEnquiryServiceImpl implements CustomerEnquiryService {
 	@TimeLogger
 	public boolean emailNotExist(String email) {
 		Optional<CustomerSaving> optional = customerAccountEnquiryRepository.findByEmail(email);
-		if(optional.isPresent()) {
+		if (optional.isPresent()) {
 			return false;
-		}else {
-			return true;	
+		} else {
+			return true;
 		}
 	}
-	
-	
+
 	@Override
 	@TimeLogger
-	public String updateEnquiryRegId(int csaid,String ucrid) {
+	public String updateEnquiryRegId(int csaid, String ucrid) {
 		CustomerSaving customerSavingEntity = customerAccountEnquiryRepository.findById(csaid).get();
 		customerSavingEntity.setUcrid(ucrid);
 		return "done";
 	}
-
-	
 
 	@Override
 	@TimeLogger
@@ -130,39 +127,38 @@ public class CustomerEnquiryServiceImpl implements CustomerEnquiryService {
 		customerSavingVO.setStatus(customerSavingEntity.getStatus().getName());
 		return customerSavingVO;
 	}
-	
+
 	@Override
 	@TimeLogger
-	public CustomerSavingVO changeEnquiryStatus(int csaid,String status) {
+	public CustomerSavingVO changeEnquiryStatus(int csaid, String status) {
 		CustomerSaving customerSavingEntity = customerAccountEnquiryRepository.findById(csaid).get();
-		//status = APPROVED
-		AccountStatus accountStatus=accountStatusRepository.findByName(status).get();
-		//Updating account status
+		// status = APPROVED
+		AccountStatus accountStatus = accountStatusRepository.findByName(status).get();
+		// Updating account status
 		customerSavingEntity.setStatus(accountStatus);
-		//Sending Back customer enquiry
+		// Sending Back customer enquiry
 		CustomerSavingVO customerSavingVO = new CustomerSavingVO();
 		BeanUtils.copyProperties(customerSavingEntity, customerSavingVO, new String[] { "accType", "status" });
 		customerSavingVO.setAccType(customerSavingEntity.getAccType().getName());
 		customerSavingVO.setStatus(customerSavingEntity.getStatus().getName());
 		return customerSavingVO;
 	}
-	
+
 	@Override
 	@TimeLogger
 	public Optional<CustomerSavingVO> findCustomerEnquiryByUuid(String ucrid) {
 		Optional<CustomerSaving> ocustomerSavingEntity = customerAccountEnquiryRepository.findByUcrid(ucrid);
-		if(ocustomerSavingEntity.isPresent()) {
+		if (ocustomerSavingEntity.isPresent()) {
 			CustomerSavingVO customerSavingVO = new CustomerSavingVO();
-			CustomerSaving customerSavingEntity=ocustomerSavingEntity.get();
+			CustomerSaving customerSavingEntity = ocustomerSavingEntity.get();
 			BeanUtils.copyProperties(customerSavingEntity, customerSavingVO, new String[] { "accType", "status" });
 			customerSavingVO.setAccType(customerSavingEntity.getAccType().getName());
 			customerSavingVO.setStatus(customerSavingEntity.getStatus().getName());
-			return Optional.of(customerSavingVO);	
-		}else {
+			return Optional.of(customerSavingVO);
+		} else {
 			return Optional.empty();
 		}
 	}
-	
 
 	@Override
 	@TimeLogger
@@ -175,8 +171,10 @@ public class CustomerEnquiryServiceImpl implements CustomerEnquiryService {
 		for (CustomerSaving customerSavingEntity : customerSavingList) {
 			CustomerSavingVO customerSavingVO = new CustomerSavingVO();
 			BeanUtils.copyProperties(customerSavingEntity, customerSavingVO, new String[] { "accType", "status" });
-			customerSavingVO.setAccType(customerSavingEntity.getAccType()!=null?customerSavingEntity.getAccType().getName():null);
-			customerSavingVO.setStatus(customerSavingEntity.getStatus()!=null?customerSavingEntity.getStatus().getName():null);
+			customerSavingVO.setAccType(
+					customerSavingEntity.getAccType() != null ? customerSavingEntity.getAccType().getName() : null);
+			customerSavingVO.setStatus(
+					customerSavingEntity.getStatus() != null ? customerSavingEntity.getStatus().getName() : null);
 			customerSavingVOList.add(customerSavingVO);
 		}
 		return customerSavingVOList;
