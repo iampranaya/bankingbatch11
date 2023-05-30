@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.rab3tech.vo.RoleVO;
 
-//@RestController
+@RestController
 @CrossOrigin(origins = "*")
 @RequestMapping("/v3")
 public class RoleController {
